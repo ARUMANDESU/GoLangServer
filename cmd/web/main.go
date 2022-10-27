@@ -5,6 +5,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/go-playground/form/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"html/template"
 	"log"
@@ -17,6 +18,7 @@ type application struct {
 	infoLog       *log.Logger
 	snippets      *models.SnippetModel
 	templateCache map[string]*template.Template
+	formDecoder   *form.Decoder
 }
 
 func main() {
@@ -37,7 +39,7 @@ func main() {
 
 	fmt.Println(greeting)
 
-	addr := flag.String("addr", ":4000", "HTTP network address")
+	addr := flag.String("addr", ":5000", "HTTP network address")
 
 	flag.Parse()
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -46,12 +48,15 @@ func main() {
 	if err != nil {
 		errorLog.Fatal(err)
 	}
-	// And add it to the application dependencies.
+
+	formDecoder := form.NewDecoder()
+
 	app := &application{
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		snippets:      &models.SnippetModel{DB: dbConn},
 		templateCache: templateCache,
+		formDecoder:   formDecoder,
 	}
 	srv := &http.Server{
 		Addr:     *addr,
