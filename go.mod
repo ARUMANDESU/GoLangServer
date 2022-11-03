@@ -3,6 +3,8 @@ module com.aitu.snippetbox
 go 1.19
 
 require (
+	github.com/alexedwards/scs/pgxstore v0.0.0-20220528130143-d93ace5be94b // indirect
+	github.com/alexedwards/scs/v2 v2.5.0 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
